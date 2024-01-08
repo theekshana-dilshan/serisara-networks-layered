@@ -35,6 +35,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     public boolean delete(String id) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("DELETE FROM Customer WHERE cId=?",id);
     }
+
     @Override
     public  String generateNewId() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT cId FROM Customer ORDER BY cId DESC LIMIT 1;");
