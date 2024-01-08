@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="782.0" prefWidth="1293.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.controller.ReportFormController">
+   <children>
+      <Pane layoutX="72.0" layoutY="107.0" prefHeight="611.0" prefWidth="345.0" style="-fx-border-color: #403D39; -fx-border-width: 2px; -fx-background-color: #CCC5B9;">
+         <children>
+            <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="73.0" layoutY="149.0">
+               <image>
+                  <Image url="@../asset/logo qqqqqq.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="128.0" layoutY="309.0" prefHeight="30.0" prefWidth="90.0" text="Stock Report">
+               <font>
+                  <Font name="Arial Bold" size="14.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="74.0" fitWidth="74.0" layoutX="136.0" layoutY="151.0">
+               <image>
+                  <Image url="@../asset/S letter geometric Logo design Linear.  (2).png" />
+               </image>
+            </ImageView>
+            <JFXButton layoutX="53.0" layoutY="400.0" onAction="#btnShowReportOnAction" prefHeight="30.0" prefWidth="240.0" style="-fx-background-color: #403D39;" text="Generate report" textFill="WHITE" />
+         </children></Pane>
+      <Label layoutX="41.0" layoutY="24.0" prefHeight="30.0" prefWidth="198.0" text="Manage Stock">
+         <font>
+            <Font name="Arial Bold" size="20.0" />
+         </font>
+      </Label>
+      <Pane layoutX="474.0" layoutY="107.0" prefHeight="611.0" prefWidth="345.0" style="-fx-border-color: #403D39; -fx-border-width: 2px; -fx-background-color: #CCC5B9;">
+         <children>
+            <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="73.0" layoutY="147.0">
+               <image>
+                  <Image url="@../asset/logo qqqqqq.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="113.0" layoutY="305.0" prefHeight="30.0" prefWidth="120.0" text="Employee Report">
+               <font>
+                  <Font name="Arial Bold" size="14.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="74.0" fitWidth="74.0" layoutX="136.0" layoutY="149.0">
+               <image>
+                  <Image url="@../asset/S letter geometric Logo design Linear.  (2).png" />
+               </image>
+            </ImageView>
+            <JFXButton layoutX="53.0" layoutY="400.0" onAction="#btnEmployeeGenerateReportOnAction" prefHeight="30.0" prefWidth="240.0" style="-fx-background-color: #403D39;" text="Generate report" textFill="WHITE" />
+         </children>
+      </Pane>
+      <Pane layoutX="875.0" layoutY="107.0" prefHeight="611.0" prefWidth="345.0" style="-fx-border-color: #403D39; -fx-border-width: 2px; -fx-background-color: #CCC5B9;">
+         <children>
+            <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="73.0" layoutY="78.0">
+               <image>
+                  <Image url="@../asset/logo qqqqqq.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="128.0" layoutY="235.0" prefHeight="30.0" prefWidth="90.0" text="Oder report">
+               <font>
+                  <Font name="Arial Bold" size="14.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="74.0" fitWidth="74.0" layoutX="136.0" layoutY="79.0">
+               <image>
+                  <Image url="@../asset/S letter geometric Logo design Linear.  (2).png" />
+               </image>
+            </ImageView>
+            <DatePicker fx:id="dtpFrom" layoutX="73.0" layoutY="354.0" prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: #403D39;" />
+            <DatePicker fx:id="dtpTo" layoutX="73.0" layoutY="412.0" prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: #403D39;" />
+            <JFXButton fx:id="btnOrderOk" layoutX="73.0" layoutY="493.0" onAction="#btnOrderReportOkOnAction" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #403D39;" text="Generate report" textFill="WHITE" />
+            <Label layoutX="73.0" layoutY="337.0" text="From:">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="73.0" layoutY="397.0" text="To:">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+            </Label>
+            <JFXComboBox fx:id="cmbType" layoutX="71.0" layoutY="293.0" onAction="#cmbTypeOnAction" prefHeight="25.0" prefWidth="200.0" promptText="Select type" unFocusColor="BLACK" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
