@@ -1,4 +1,6 @@
 package lk.ijse.bo.custom.impl;
 
-public class PlaceOrderBOImpl {
+import lk.ijse.bo.custom.PlaceOrderBO;
+
+public class PlaceOrderBOImpl implements PlaceOrderBO {
 }

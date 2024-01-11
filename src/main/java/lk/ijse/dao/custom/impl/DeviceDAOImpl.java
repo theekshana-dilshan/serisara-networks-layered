@@ -2,12 +2,14 @@ package lk.ijse.dao.custom.impl;
 
 import lk.ijse.dao.SQLUtil;
 import lk.ijse.dao.custom.DeviceDAO;
+import lk.ijse.dto.DeviceDto;
 import lk.ijse.entity.Customer;
 import lk.ijse.entity.Device;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DeviceDAOImpl implements DeviceDAO {
     @Override
@@ -61,5 +63,16 @@ public class DeviceDAOImpl implements DeviceDAO {
         ResultSet rst = SQLUtil.execute("SELECT * FROM handOverDevice WHERE deviceId=?",id);
         rst.next();
         return new Device(id + "", rst.getString("dName"), rst.getString("problem"), rst.getString("status"), rst.getString("cost"), rst.getDate("date").toLocalDate(), rst.getString("cId"));
+    }
+
+    @Override
+    public ArrayList<Device> getAllDevicesByStatus(String status) throws SQLException, ClassNotFoundException {
+        ResultSet rst = SQLUtil.execute("SELECT * FROM handoverDevice WHERE status = ?", status);
+        ArrayList<Device> getAllDevice=new ArrayList<>();
+        while (rst.next()){
+            Device entity=new Device(rst.getString("deviceId"), rst.getString("dName"), rst.getString("problem"), rst.getString("status"), rst.getString("cost"), rst.getDate("date").toLocalDate(), rst.getString("cId"));
+            getAllDevice.add(entity);
+        }
+        return getAllDevice;
     }
 }

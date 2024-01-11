@@ -1,11 +1,12 @@
 package lk.ijse.bo.custom;
 
+import lk.ijse.bo.SuperBO;
 import lk.ijse.dto.ItemDto;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public interface ItemBO {
+public interface ItemBO extends SuperBO {
     ArrayList<ItemDto> getAllItem() throws SQLException, ClassNotFoundException;
     boolean saveItem(ItemDto dto) throws SQLException, ClassNotFoundException;
     boolean updateItem(ItemDto dto) throws SQLException, ClassNotFoundException;

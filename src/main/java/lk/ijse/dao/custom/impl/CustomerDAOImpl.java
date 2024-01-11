@@ -2,6 +2,7 @@ package lk.ijse.dao.custom.impl;
 
 import lk.ijse.dao.SQLUtil;
 import lk.ijse.dao.custom.CustomerDAO;
+import lk.ijse.dto.CustomerDto;
 import lk.ijse.entity.Customer;
 
 import java.sql.ResultSet;
@@ -57,5 +58,19 @@ public class CustomerDAOImpl implements CustomerDAO {
         ResultSet rst = SQLUtil.execute("SELECT * FROM Customer WHERE cId=?",id);
         rst.next();
         return new Customer(id + "", rst.getString("name"), rst.getString("email"), rst.getString("address"), rst.getString("contact"), rst.getString("userId"));
+    }
+
+    @Override
+    public Customer getCustomer(String id) throws SQLException, ClassNotFoundException {
+        ResultSet rst = SQLUtil.execute("SELECT * FROM Customer WHERE cId=?",id);
+        rst.next();
+        return new Customer(id + "", rst.getString("name"), rst.getString("email"), rst.getString("address"), rst.getString("contact"), rst.getString("userId"));
+    }
+
+    @Override
+    public Customer getCustomerByName(String name) throws SQLException, ClassNotFoundException {
+        ResultSet rst = SQLUtil.execute("SELECT * FROM Customer WHERE name=?",name);
+        rst.next();
+        return new Customer(rst.getString("cId"), name + "", rst.getString("email"), rst.getString("address"), rst.getString("contact"), rst.getString("userId"));
     }
 }

@@ -39,42 +39,16 @@ public class CustomerBOImpl implements CustomerBO {
         return customerDAO.delete(id);
     }
 
-    public CustomerDto getCustomer(String id) throws SQLException {
-        Connection connection = DBConnection.getInstance().getConnection();
-        String sql = "SELECT * FROM customer WHERE cId =?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,id );
-        ResultSet resultSet = preparedStatement.executeQuery();
-        if(resultSet.next()){
-            CustomerDto customerDto = new CustomerDto();
-            customerDto.setCId(resultSet.getString(1));
-            customerDto.setName(resultSet.getString(2));
-            customerDto.setEmail(resultSet.getString(3));
-            customerDto.setAddress(resultSet.getString(4));
-            customerDto.setContact(resultSet.getString(5));
-            customerDto.setUserId(resultSet.getString(6));
-            return customerDto;
-        }
-        return null;
+    public CustomerDto getCustomer(String id) throws SQLException, ClassNotFoundException {
+        Customer customer = customerDAO.getCustomer(id);
+        CustomerDto dto = new CustomerDto(customer.getCId(), customer.getName(), customer.getEmail(), customer.getAddress(), customer.getContact(), customer.getUserId());
+        return dto;
     }
 
-    public CustomerDto getCustomerByName(String name) throws SQLException {
-        Connection connection = DBConnection.getInstance().getConnection();
-        String sql = "SELECT * FROM customer WHERE name =?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,name );
-        ResultSet resultSet = preparedStatement.executeQuery();
-        if(resultSet.next()){
-            CustomerDto customerDto = new CustomerDto();
-            customerDto.setCId(resultSet.getString(1));
-            customerDto.setName(resultSet.getString(2));
-            customerDto.setEmail(resultSet.getString(3));
-            customerDto.setAddress(resultSet.getString(4));
-            customerDto.setContact(resultSet.getString(5));
-            customerDto.setUserId(resultSet.getString(6));
-            return customerDto;
-        }
-        return null;
+    public CustomerDto getCustomerByName(String name) throws SQLException, ClassNotFoundException {
+        Customer customer = customerDAO.getCustomerByName(name);
+        CustomerDto dto = new CustomerDto(customer.getCId(), customer.getName(), customer.getEmail(), customer.getAddress(), customer.getContact(), customer.getUserId());
+        return dto;
     }
     @Override
     public String generateNextCustomerId() throws SQLException, ClassNotFoundException {

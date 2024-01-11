@@ -1,4 +1,6 @@
 package lk.ijse.bo.custom;
 
-public interface OrderItemBO {
+import lk.ijse.bo.SuperBO;
+
+public interface OrderItemBO extends SuperBO {
 }
