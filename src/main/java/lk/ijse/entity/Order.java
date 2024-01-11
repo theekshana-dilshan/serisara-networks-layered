@@ -16,6 +16,4 @@ public class Order {
     private String orderId;
     private LocalDate date;
     private String cId;
-
-    private List<OrderTm> orderTmList = new ArrayList<>();
 }
