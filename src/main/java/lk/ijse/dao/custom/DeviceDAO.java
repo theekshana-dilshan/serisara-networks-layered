@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface DeviceDAO extends CrudDAO<Device> {
     List<Device> getAllDevicesByStatus(String status) throws SQLException, ClassNotFoundException;
+    Device getDevice(String deviceId) throws SQLException, ClassNotFoundException;
 }

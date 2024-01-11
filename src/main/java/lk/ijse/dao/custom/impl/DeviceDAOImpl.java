@@ -75,4 +75,11 @@ public class DeviceDAOImpl implements DeviceDAO {
         }
         return getAllDevice;
     }
+
+    @Override
+    public Device getDevice(String deviceId) throws SQLException, ClassNotFoundException {
+        ResultSet rst = SQLUtil.execute("SELECT * FROM handOverDevice WHERE deviceId=?",deviceId);
+        rst.next();
+        return new Device(rst.getString("deviceId"), rst.getString("dName"), rst.getString("problem"), rst.getString("status"), rst.getString("cost"), rst.getDate("date").toLocalDate(), rst.getString("cId"));
+    }
 }

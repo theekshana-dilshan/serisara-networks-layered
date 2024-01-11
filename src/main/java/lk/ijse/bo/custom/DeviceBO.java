@@ -16,12 +16,12 @@ public interface DeviceBO extends SuperBO {
 
     List<DeviceDto> getAllDevicesByStatus(String status) throws SQLException, ClassNotFoundException;
 
-    boolean setDevice(DeviceDto dto) throws SQLException;
-    boolean updateDevice(DeviceDto dto) throws SQLException;
+    boolean setDevice(DeviceDto dto) throws SQLException, ClassNotFoundException;
+    boolean updateDevice(DeviceDto dto) throws SQLException, ClassNotFoundException;
 
-    boolean deleteDevice(String deviceId) throws SQLException;
+    boolean deleteDevice(String deviceId) throws SQLException, ClassNotFoundException;
 
-    DeviceDto getDevice(String deviceId) throws SQLException;
+    DeviceDto getDevice(String deviceId) throws SQLException, ClassNotFoundException;
 
-    String generateNextDeviceId() throws SQLException;
+    String generateNextDeviceId() throws SQLException, ClassNotFoundException;
 }

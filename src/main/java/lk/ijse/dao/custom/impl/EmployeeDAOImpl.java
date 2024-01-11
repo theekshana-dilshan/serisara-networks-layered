@@ -2,6 +2,8 @@ package lk.ijse.dao.custom.impl;
 
 import lk.ijse.dao.SQLUtil;
 import lk.ijse.dao.custom.EmployeeDAO;
+import lk.ijse.dto.CustomerDto;
+import lk.ijse.dto.EmployeeDto;
 import lk.ijse.entity.Customer;
 import lk.ijse.entity.Employee;
 
@@ -61,5 +63,12 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         ResultSet rst = SQLUtil.execute("SELECT * FROM employee WHERE empId=?",id);
         rst.next();
         return new Employee(id + "", rst.getString("name"), rst.getString("address"), rst.getString("position"), rst.getString("contact"), rst.getString("salary"), rst.getString("userId"));
+    }
+
+    @Override
+    public Employee getEmployee(String empId) throws SQLException, ClassNotFoundException {
+        ResultSet rst = SQLUtil.execute("SELECT * FROM employee WHERE empId=?",empId);
+        rst.next();
+        return new Employee(empId + "", rst.getString("name"), rst.getString("address"), rst.getString("position"), rst.getString("contact"), rst.getString("salary"), rst.getString("userId"));
     }
 }

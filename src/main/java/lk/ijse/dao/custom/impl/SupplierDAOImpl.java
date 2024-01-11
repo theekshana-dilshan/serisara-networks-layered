@@ -2,6 +2,7 @@ package lk.ijse.dao.custom.impl;
 
 import lk.ijse.dao.SQLUtil;
 import lk.ijse.dao.custom.SupplierDAO;
+import lk.ijse.dto.SupplierDto;
 import lk.ijse.entity.Customer;
 import lk.ijse.entity.Supplier;
 
@@ -61,5 +62,19 @@ public class SupplierDAOImpl implements SupplierDAO {
         ResultSet rst = SQLUtil.execute("SELECT * FROM supplier WHERE supId=?",id);
         rst.next();
         return new Supplier(id + "", rst.getString("sName"), rst.getString("address"), rst.getString("contact"));
+    }
+
+    @Override
+    public Supplier getSupplier(String supId) throws SQLException, ClassNotFoundException {
+        ResultSet rst = SQLUtil.execute("SELECT * FROM supplier WHERE supId=?",supId);
+        rst.next();
+        return new Supplier(supId + "", rst.getString("sName"), rst.getString("address"), rst.getString("contact"));
+    }
+
+    @Override
+    public Supplier getSupplierByName(String name) throws SQLException, ClassNotFoundException {
+        ResultSet rst = SQLUtil.execute("SELECT * FROM supplier WHERE sName=?",name);
+        rst.next();
+        return new Supplier(rst.getString("supId"), rst.getString("sName"), rst.getString("address"), rst.getString("contact"));
     }
 }

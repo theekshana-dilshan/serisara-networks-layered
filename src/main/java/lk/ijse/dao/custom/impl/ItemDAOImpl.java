@@ -2,11 +2,18 @@ package lk.ijse.dao.custom.impl;
 
 import lk.ijse.dao.SQLUtil;
 import lk.ijse.dao.custom.ItemDAO;
+import lk.ijse.dto.CustomerDto;
+import lk.ijse.dto.ItemDto;
+import lk.ijse.dto.tm.OrderTm;
+import lk.ijse.entity.Customer;
 import lk.ijse.entity.Item;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+
+import static lk.ijse.model.ItemModel.updateQty;
 
 public class ItemDAOImpl implements ItemDAO {
     @Override
@@ -40,8 +47,8 @@ public class ItemDAOImpl implements ItemDAO {
         ResultSet rst = SQLUtil.execute("SELECT itemId FROM item ORDER BY itemId DESC LIMIT 1;");
         if (rst.next()) {
             String id = rst.getString("itemId");
-            int newCustomerId = Integer.parseInt(id.replace("I00-", "")) + 1;
-            return String.format("I00-%03d", newCustomerId);
+            int newItemId = Integer.parseInt(id.replace("I00-", "")) + 1;
+            return String.format("I00-%03d", newItemId);
         } else {
             return "I00-001";
         }
@@ -57,5 +64,42 @@ public class ItemDAOImpl implements ItemDAO {
         ResultSet rst = SQLUtil.execute("SELECT * FROM item WHERE itemId=?",id);
         rst.next();
         return new Item(id + "", rst.getString("itemName"), rst.getString("qtyOnHand"), rst.getString("cost"), rst.getString("unitPrice"));
+    }
+
+    @Override
+    public boolean updateItemBySupply(ItemDto entity) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("Update item SET qtyOnHand = qtyOnHand + ?, cost =? WHERE itemId =?"
+                , entity.getQtyOnHand(), entity.getCost(), entity.getItemId());
+    }
+
+    @Override
+    public boolean updateItem(List<OrderTm> orderTmList) throws SQLException, ClassNotFoundException {
+        for(OrderTm tm : orderTmList) {
+            System.out.println("Item: " + tm);
+            if(!updateQty(tm.getItemId(), tm.getQty())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean updateQty(String code, int qty) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("UPDATE item SET qtyOnHand = qtyOnHand - ? WHERE itemId = ?"
+                , qty, code);
+    }
+
+    @Override
+    public Item getItem(String itemName) throws SQLException, ClassNotFoundException {
+        ResultSet rst = SQLUtil.execute("SELECT * FROM item WHERE itemName=?",itemName);
+        rst.next();
+        return new Item(rst.getString("itemId"), rst.getString("itemName"), rst.getString("qtyOnHand"), rst.getString("cost"), rst.getString("unitPrice"));
+    }
+
+    @Override
+    public Item getItemById(String id) throws SQLException, ClassNotFoundException {
+        ResultSet rst = SQLUtil.execute("SELECT * FROM item WHERE itemId=?",id);
+        rst.next();
+        return new Item(rst.getString("itemId"), rst.getString("itemName"), rst.getString("qtyOnHand"), rst.getString("cost"), rst.getString("unitPrice"));
     }
 }

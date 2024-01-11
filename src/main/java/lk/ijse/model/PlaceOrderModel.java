@@ -25,7 +25,7 @@ public class PlaceOrderModel {
 
             boolean isOrderSaved = OrdersModel.saveOrder(orderId, date, customerId);
             if (isOrderSaved) {
-                boolean isUpdated = ItemModel.updateItem(orderDto.getOrderTmList());
+                boolean isUpdated = ItemModel.updateItemDto(orderDto.getOrderTmList());
                 if(isUpdated) {
                     boolean isOrderDetailSaved = OrderItemModel.saveOrderDetails(orderDto.getOrderId(), orderDto.getOrderTmList());
                     if (isOrderDetailSaved) {

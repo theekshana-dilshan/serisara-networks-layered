@@ -19,12 +19,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import lk.ijse.dto.CustomerDto;
 import lk.ijse.dto.ItemDto;
 import lk.ijse.dto.tm.StockTm;
-import lk.ijse.model.CustomerModel;
 import lk.ijse.model.ItemModel;
-import lk.ijse.model.OrdersModel;
 import org.controlsfx.control.Notifications;
 
 import java.io.IOException;
@@ -246,7 +243,7 @@ public class StockManageFormController {
         ItemDto dto = new ItemDto(id, name, cost, qty, unitPrice);
 
         try {
-            boolean isUpdated = ItemModel.updateItem(dto);
+            boolean isUpdated = ItemModel.updateItemDto(dto);
 
             if (isUpdated){
                 Notifications.create()

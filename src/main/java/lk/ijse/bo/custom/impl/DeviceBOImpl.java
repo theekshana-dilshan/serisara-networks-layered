@@ -37,27 +37,29 @@ public class DeviceBOImpl implements DeviceBO {
     }
 
     @Override
-    public boolean setDevice(DeviceDto dto) throws SQLException {
-        return false;
+    public boolean setDevice(DeviceDto dto) throws SQLException, ClassNotFoundException {
+        return deviceDAO.save(new Device(dto.getDeviceId(),dto.getDName(),dto.getProblem(),dto.getStatus(),dto.getCost(),dto.getDate(), dto.getCId()));
     }
 
     @Override
-    public boolean updateDevice(DeviceDto dto) throws SQLException {
-        return false;
+    public boolean updateDevice(DeviceDto dto) throws SQLException, ClassNotFoundException {
+        return deviceDAO.update(new Device(dto.getDeviceId(),dto.getDName(),dto.getProblem(),dto.getStatus(),dto.getCost(),dto.getDate(), dto.getCId()));
     }
 
     @Override
-    public boolean deleteDevice(String deviceId) throws SQLException {
-        return false;
+    public boolean deleteDevice(String deviceId) throws SQLException, ClassNotFoundException {
+        return deviceDAO.delete(deviceId);
     }
 
     @Override
-    public DeviceDto getDevice(String deviceId) throws SQLException {
-        return null;
+    public DeviceDto getDevice(String deviceId) throws SQLException, ClassNotFoundException {
+        Device device= deviceDAO.getDevice(deviceId);
+        DeviceDto dto = new DeviceDto(device.getDeviceId(), device.getDName(), device.getProblem(), device.getStatus(), device.getCost(), device.getDate(), device.getCId());
+        return dto;
     }
 
     @Override
-    public String generateNextDeviceId() throws SQLException {
-        return null;
+    public String generateNextDeviceId() throws SQLException, ClassNotFoundException {
+        return deviceDAO.generateNewId();
     }
 }
