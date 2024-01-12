@@ -19,6 +19,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import lk.ijse.bo.BOFactory;
+import lk.ijse.bo.custom.ItemBO;
 import lk.ijse.dto.ItemDto;
 import lk.ijse.dto.tm.StockTm;
 import lk.ijse.model.ItemModel;
@@ -70,6 +72,8 @@ public class StockManageFormController {
     @FXML
     private JFXTextField txtSearch;
 
+    ItemBO itemBO= (ItemBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.ITEM);
+
     public void initialize(){
         setCellValueFactory();
         generateNextItemId();
@@ -90,7 +94,7 @@ public class StockManageFormController {
 
         ObservableList<StockTm> obList = FXCollections.observableArrayList();
         try {
-            List<ItemDto> dtoList = ItemModel.getAllItems();
+            List<ItemDto> dtoList = itemBO.getAllItems();
 
             for(ItemDto dto : dtoList){
                 obList.add(
@@ -104,7 +108,7 @@ public class StockManageFormController {
                 );
             }
             tblItems.setItems(obList);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -130,7 +134,7 @@ public class StockManageFormController {
         ItemDto itemDto = new ItemDto(id, name, qty, cost, unitPrice);
 
         try {
-            boolean isSaved = ItemModel.setItem(itemDto);
+            boolean isSaved = itemBO.setItem(itemDto);
             if (isSaved) {
                 Notifications.create()
                         .graphic(new ImageView(new Image("/icons/icons8-check-mark-48.png")))
@@ -149,7 +153,7 @@ public class StockManageFormController {
                 alert.showAndWait();
                 root.setEffect(null);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -204,7 +208,7 @@ public class StockManageFormController {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = ItemModel.deleteItem(id);
+            boolean isDeleted = itemBO.deleteItem(id);
             if (isDeleted) {
                 BoxBlur blur = new BoxBlur(3, 3, 1);
                 root.setEffect(blur);
@@ -219,7 +223,7 @@ public class StockManageFormController {
                 alert.showAndWait();
                 root.setEffect(null);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -243,7 +247,7 @@ public class StockManageFormController {
         ItemDto dto = new ItemDto(id, name, cost, qty, unitPrice);
 
         try {
-            boolean isUpdated = ItemModel.updateItemDto(dto);
+            boolean isUpdated = itemBO.updateItemDto(dto);
 
             if (isUpdated){
                 Notifications.create()
@@ -263,7 +267,7 @@ public class StockManageFormController {
                 alert.showAndWait();
                 root.setEffect(null);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -274,7 +278,7 @@ public class StockManageFormController {
 
         if (id!= null &&!id.isEmpty()) {
             try {
-                ItemDto itemDto = ItemModel.getItemById(id);
+                ItemDto itemDto = itemBO.getItemById(id);
 
                 if(itemDto != null){
                     txtId.setText(itemDto.getItemId());
@@ -287,7 +291,7 @@ public class StockManageFormController {
                     alert.showAndWait();
                 }
 
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         } else {
@@ -315,9 +319,9 @@ public class StockManageFormController {
 
     private void generateNextItemId() {
         try {
-            String itemId = ItemModel.generateNextItemId();
+            String itemId = itemBO.generateNextItemId();
             txtId.setText(itemId);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }

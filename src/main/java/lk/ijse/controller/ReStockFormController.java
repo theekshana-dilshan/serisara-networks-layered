@@ -14,6 +14,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import lk.ijse.bo.BOFactory;
+import lk.ijse.bo.custom.ItemBO;
+import lk.ijse.bo.custom.SupplierBO;
 import lk.ijse.dto.CustomerDto;
 import lk.ijse.dto.ItemDto;
 import lk.ijse.dto.SupplierDto;
@@ -47,6 +50,8 @@ public class ReStockFormController {
 
     @FXML
     private JFXTextField txtqty;
+    ItemBO itemBO= (ItemBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.ITEM);
+    SupplierBO supplierBO= (SupplierBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.SUPPLIER);
 
     public void initialize(){
         loadItemNames();
@@ -56,13 +61,13 @@ public class ReStockFormController {
     private void loadItemNames() {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<ItemDto> itemDtos = ItemModel.getAllItems();
+            List<ItemDto> itemDtos = itemBO.getAllItems();
 
             for (ItemDto dto : itemDtos) {
                 obList.add(dto.getItemName());
             }
             cmbItemName.setItems(obList);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -71,14 +76,14 @@ public class ReStockFormController {
         ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<SupplierDto> idList = SupplierModel.getAllSuppliers();
+            List<SupplierDto> idList = supplierBO.getAllSuppliers();
 
             for (SupplierDto dto : idList) {
                 obList.add(dto.getSName());
             }
 
             cmbSupplierName.setItems(obList);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -133,10 +138,10 @@ public class ReStockFormController {
 
         if (name != null && !name.isEmpty()) {
             try {
-                ItemDto dto = ItemModel.getItem(name);
+                ItemDto dto = itemBO.getItem(name);
                 txtId.setText(dto.getItemId());
                 txtCost.setText(dto.getCost());
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         } else {
@@ -150,10 +155,10 @@ public class ReStockFormController {
 
         if (name!= null &&!name.isEmpty()) {
             try {
-                SupplierDto supplierDto = SupplierModel.getSupplierByName(name);
+                SupplierDto supplierDto = supplierBO.getSupplierByName(name);
                 txtSupplierId.setText(supplierDto.getSupId());
 
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         } else {

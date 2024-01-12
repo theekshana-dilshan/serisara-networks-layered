@@ -11,6 +11,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import lk.ijse.bo.BOFactory;
+import lk.ijse.bo.custom.CustomerBO;
+import lk.ijse.bo.custom.UserBO;
 import lk.ijse.dto.UserDto;
 import lk.ijse.model.OrdersModel;
 import lk.ijse.model.UserModel;
@@ -45,6 +48,8 @@ public class AddUserFormController {
 
     @FXML
     private JFXTextField txtUserName;
+
+    UserBO userBO= (UserBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.USER);
 
     public void initialize(){
         generateNextUserId();
@@ -83,7 +88,7 @@ public class AddUserFormController {
         UserDto dto = new UserDto(userId,userName,password,email);
 
         try {
-            boolean isAdded = UserModel.setUser(dto);
+            boolean isAdded = userBO.setUser(dto);
             if (isAdded) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Succsess");
                 alert.showAndWait();
@@ -92,16 +97,16 @@ public class AddUserFormController {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Something went wrong");
                 alert.showAndWait();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
     private void generateNextUserId() {
         try {
-            String userId = UserModel.generateNextUserId();
+            String userId = userBO.generateNextUserId();
             txtUserId.setText(userId);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }

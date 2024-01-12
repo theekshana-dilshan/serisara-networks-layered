@@ -10,6 +10,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import lk.ijse.bo.BOFactory;
+import lk.ijse.bo.custom.CustomerBO;
+import lk.ijse.bo.custom.DeviceBO;
+import lk.ijse.bo.custom.EmployeeBO;
+import lk.ijse.bo.custom.OrderBO;
 import lk.ijse.dto.CustomerDto;
 import lk.ijse.dto.DeviceDto;
 import lk.ijse.dto.EmployeeDto;
@@ -83,6 +88,11 @@ public class DashboardFormController {
     @FXML
     private AnchorPane subRoot;
 
+    CustomerBO customerBO= (CustomerBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.CUSTOMER);
+    OrderBO orderBO= (OrderBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.ORDER);
+    DeviceBO deviceBO= (DeviceBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.DEVICE);
+    EmployeeBO employeeBO= (EmployeeBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.EMPLOYEE);
+
     public void initialize(){
         //btnDashboard.setStyle("-fx-background-color: #D3D3D3;");
         setDate();
@@ -97,14 +107,14 @@ public class DashboardFormController {
     public void setCustomerCount ()  {
         List<CustomerDto> list = null;
         try {
-            list = CustomerModel.getAllCustomer();
+            list = customerBO.getAllCustomer();
             int size = list.size() - 1;
             if(size < 10){
                 lblCustomerCount.setText("0"+ size);
             } else {
                 lblCustomerCount.setText(String.valueOf(size));
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -113,7 +123,7 @@ public class DashboardFormController {
         List<OrderDto> list = null;
 
         try {
-            list = OrdersModel.getAllOdersByDate(lblDate.getText());
+            list = orderBO.getAllOdersByDate(lblDate.getText());
             int size = list.size() - 1;
             if(size < 10){
                 lblTodaySales.setText("0"+ size);
@@ -122,6 +132,8 @@ public class DashboardFormController {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -129,7 +141,7 @@ public class DashboardFormController {
         List<OrderDto> list =null;
 
         try {
-            list = OrdersModel.getAllOders();
+            list = orderBO.getAllOders();
             int size = list.size();
 
             if(size < 10){
@@ -137,7 +149,7 @@ public class DashboardFormController {
             } else {
                 lblSales.setText(String.valueOf(size));
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -147,7 +159,7 @@ public class DashboardFormController {
         String status = "Repairing";
 
         try {
-            list = HandoverDeviceModel.getAllDevicesByStatus(status);
+            list = deviceBO.getAllDevicesByStatus(status);
 
             int size = list.size();
 
@@ -156,7 +168,7 @@ public class DashboardFormController {
             } else {
                 lblDeviceCount.setText(String.valueOf(size));
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -166,7 +178,7 @@ public class DashboardFormController {
         String status = "Repaired";
 
         try {
-            list = HandoverDeviceModel.getAllDevicesByStatus(status);
+            list = deviceBO.getAllDevicesByStatus(status);
 
             int size = list.size();
 
@@ -175,7 +187,7 @@ public class DashboardFormController {
             } else {
                 lblDeviceRepairedCount.setText(String.valueOf(size));
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -184,7 +196,7 @@ public class DashboardFormController {
         List<EmployeeDto> list = null;
 
         try {
-            list = EmployeeModel.getAllEmployees();
+            list = employeeBO.getAllEmployees();
             int size = list.size();
 
             if(size < 10){
@@ -193,6 +205,8 @@ public class DashboardFormController {
                 lblEmployeeCount.setText(String.valueOf(size));
             }
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

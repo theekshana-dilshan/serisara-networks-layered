@@ -14,6 +14,6 @@ import java.util.List;
 
 public interface UserDAO extends CrudDAO<User> {
     User getUserByName(String userName) throws SQLException, ClassNotFoundException;
-
     User getUserDtoList(String userId) throws SQLException, ClassNotFoundException;
+    boolean update(String password, String userId) throws SQLException, ClassNotFoundException;
 }

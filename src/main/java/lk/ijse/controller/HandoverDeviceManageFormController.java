@@ -17,6 +17,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
+import lk.ijse.bo.BOFactory;
+import lk.ijse.bo.custom.CustomerBO;
+import lk.ijse.bo.custom.DeviceBO;
 import lk.ijse.dto.CustomerDto;
 import lk.ijse.dto.DeviceDto;
 import lk.ijse.dto.tm.DeviceTm;
@@ -84,6 +87,10 @@ public class HandoverDeviceManageFormController {
     @FXML
     private Label lblOrderDate;
 
+    DeviceBO deviceBO= (DeviceBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.DEVICE);
+
+    CustomerBO customerBO= (CustomerBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.CUSTOMER);
+
     public void initialize(){
         setCellValueFactory();
         generateNextDeviceId();
@@ -107,7 +114,7 @@ public class HandoverDeviceManageFormController {
         ObservableList<DeviceTm> obList = FXCollections.observableArrayList();
 
         try {
-            List<DeviceDto> dtolist = HandoverDeviceModel.getAllDevices();
+            List<DeviceDto> dtolist = deviceBO.getAllDevices();
 
             for(DeviceDto dto : dtolist){
                 obList.add(
@@ -124,6 +131,8 @@ public class HandoverDeviceManageFormController {
             tblDevice.setItems(obList);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -131,7 +140,7 @@ public class HandoverDeviceManageFormController {
         ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<CustomerDto> idList = CustomerModel.getAllCustomer();
+            List<CustomerDto> idList = customerBO.getAllCustomer();
 
             for (CustomerDto dto : idList) {
                 obList.add(dto.getName());
@@ -139,6 +148,8 @@ public class HandoverDeviceManageFormController {
 
             cmbCustomerName.setItems(obList);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -149,10 +160,12 @@ public class HandoverDeviceManageFormController {
 
         if (name!= null &&!name.isEmpty()) {
             try {
-                CustomerDto customerDto = CustomerModel.getCustomerByName(name);
+                CustomerDto customerDto = customerBO.getCustomerByName(name);
                 txtCustomerID.setText(customerDto.getCId());
 
             } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         } else {
@@ -195,7 +208,7 @@ public class HandoverDeviceManageFormController {
 
             DeviceDto deviceDto = new DeviceDto(id, name, problem, status, cost, date ,cId);
 
-            boolean isAdded = HandoverDeviceModel.setDevice(deviceDto);
+            boolean isAdded = deviceBO.setDevice(deviceDto);
             if (isAdded) {
                 Notifications.create()
                         .graphic(new ImageView(new Image("/icons/icons8-check-mark-48.png")))
@@ -215,6 +228,8 @@ public class HandoverDeviceManageFormController {
                 root.setEffect(null);
             }
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -247,7 +262,7 @@ public class HandoverDeviceManageFormController {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = HandoverDeviceModel.deleteDevice(id);
+            boolean isDeleted = deviceBO.deleteDevice(id);
             if (isDeleted) {
                 BoxBlur blur = new BoxBlur(3, 3, 1);
                 root.setEffect(blur);
@@ -264,6 +279,8 @@ public class HandoverDeviceManageFormController {
                 root.setEffect(null);
             }
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -286,7 +303,7 @@ public class HandoverDeviceManageFormController {
         DeviceDto dto = new DeviceDto(id, name, problem, status, cost, date ,cId);
 
         try {
-            boolean isUpdated = HandoverDeviceModel.updateDevice(dto);
+            boolean isUpdated = deviceBO.updateDevice(dto);
             if (isUpdated){
                 Notifications.create()
                         .graphic(new ImageView(new Image("/icons/icons8-check-mark-48.png")))
@@ -307,6 +324,8 @@ public class HandoverDeviceManageFormController {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -316,7 +335,7 @@ public class HandoverDeviceManageFormController {
 
         if (id!= null &&!id.isEmpty()) {
             try {
-                DeviceDto deviceDto = HandoverDeviceModel.getDevice(id);
+                DeviceDto deviceDto = deviceBO.getDevice(id);
 
                 if(deviceDto != null){
                     txtId.setText(deviceDto.getCId());
@@ -331,6 +350,8 @@ public class HandoverDeviceManageFormController {
 
             } catch (SQLException e) {
                 throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         } else {
             System.out.println("Customer name is null or empty");
@@ -339,10 +360,12 @@ public class HandoverDeviceManageFormController {
 
     private void generateNextDeviceId() {
         try {
-            String deviceId = HandoverDeviceModel.generateNextDeviceId();
+            String deviceId = deviceBO.generateNextDeviceId();
             txtId.setText(deviceId);
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -364,11 +387,13 @@ public class HandoverDeviceManageFormController {
         cmbStatus.setValue(String.valueOf(row.getStatus()));
 
         try {
-            DeviceDto deviceDto = HandoverDeviceModel.getDevice(row.getDeviceId());
+            DeviceDto deviceDto = deviceBO.getDevice(row.getDeviceId());
             txtCustomerID.setText(deviceDto.getCId());
-            CustomerDto customerDto = CustomerModel.getCustomer(deviceDto.getCId());
+            CustomerDto customerDto = customerBO.getCustomer(deviceDto.getCId());
             cmbCustomerName.setValue(customerDto.getName());
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

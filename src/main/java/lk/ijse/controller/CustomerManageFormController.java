@@ -15,6 +15,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
+import lk.ijse.bo.BOFactory;
+import lk.ijse.bo.custom.CustomerBO;
 import lk.ijse.dto.CustomerDto;
 import lk.ijse.dto.tm.CustomerTm;
 import lk.ijse.dto.tm.StockTm;
@@ -59,6 +61,8 @@ public class CustomerManageFormController  implements Serializable {
     @FXML
     private AnchorPane root;
 
+    CustomerBO customerBO= (CustomerBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.CUSTOMER);
+
     public  void initialize (){
         setCellValueFactory();
         generateNextCustomerId();
@@ -75,11 +79,9 @@ public class CustomerManageFormController  implements Serializable {
     }
 
     public void loadAllCustomer() {
-        var model = new CustomerModel();
-
         ObservableList<CustomerTm> obList = FXCollections.observableArrayList();
         try {
-            List<CustomerDto> dtoList = CustomerModel.getAllCustomer();
+            List<CustomerDto> dtoList = customerBO.getAllCustomer();
 
             for(CustomerDto dto : dtoList){
                 obList.add(
@@ -93,16 +95,16 @@ public class CustomerManageFormController  implements Serializable {
                 );
             }
             tblCustomer.setItems(obList);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
     private void generateNextCustomerId() {
         try {
-            String customerId = CustomerModel.generateNextCustomerId();
+            String customerId = customerBO.generateNextCustomerId();
             txtCustomerId.setText(customerId);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
@@ -127,7 +129,7 @@ public class CustomerManageFormController  implements Serializable {
             CustomerDto dto = new CustomerDto(id, name, email, address, contact, uId);
 
             try {
-                boolean isSaved = CustomerModel.setCustomer(dto);
+                boolean isSaved = customerBO.setCustomer(dto);
                 if (isSaved) {
                     Notifications.create()
                             .graphic(new ImageView(new Image("/icons/icons8-check-mark-48.png")))
@@ -147,7 +149,7 @@ public class CustomerManageFormController  implements Serializable {
                     alert.showAndWait();
                     root.setEffect(null);
                 }
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
@@ -202,7 +204,7 @@ public class CustomerManageFormController  implements Serializable {
         String id = txtCustomerId.getText();
 
         try {
-            boolean isDeleted = CustomerModel.deleteCustomer(id);
+            boolean isDeleted = customerBO.deleteCustomer(id);
             if (isDeleted) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Success");
                 alert.showAndWait();
@@ -215,6 +217,8 @@ public class CustomerManageFormController  implements Serializable {
                 root.setEffect(null);
             }
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -236,7 +240,7 @@ public class CustomerManageFormController  implements Serializable {
         CustomerDto dto = new CustomerDto(id, name, email, address, contact, uId);
 
         try {
-            boolean isAdded = CustomerModel.updateCustomer(dto);
+            boolean isAdded = customerBO.updateCustomer(dto);
             if(isAdded){
                 Notifications.create()
                         .graphic(new ImageView(new Image("/icons/icons8-check-mark-48.png")))
@@ -258,6 +262,8 @@ public class CustomerManageFormController  implements Serializable {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -267,7 +273,7 @@ public class CustomerManageFormController  implements Serializable {
 
         if (id!= null &&!id.isEmpty()) {
             try {
-                CustomerDto customerDto = CustomerModel.getCustomer(id);
+                CustomerDto customerDto = customerBO.getCustomer(id);
 
                 if(customerDto != null){
                 txtCustomerId.setText(customerDto.getCId());
@@ -281,6 +287,8 @@ public class CustomerManageFormController  implements Serializable {
                 }
 
             } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         } else {

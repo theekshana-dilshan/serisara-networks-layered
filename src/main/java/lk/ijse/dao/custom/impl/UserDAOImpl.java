@@ -40,8 +40,8 @@ public class UserDAOImpl implements UserDAO {
         ResultSet rst = SQLUtil.execute("SELECT userId FROM user ORDER BY userId DESC LIMIT 1;");
         if (rst.next()) {
             String id = rst.getString("userId");
-            int newCustomerId = Integer.parseInt(id.replace("U00-", "")) + 1;
-            return String.format("U00-%03d", newCustomerId);
+            int newUserId = Integer.parseInt(id.replace("U00-", "")) + 1;
+            return String.format("U00-%03d", newUserId);
         } else {
             return "U00-001";
         }
@@ -69,5 +69,11 @@ public class UserDAOImpl implements UserDAO {
         ResultSet rst = SQLUtil.execute("SELECT * FROM Customer WHERE cId=?",userId);
         rst.next();
         return new User(userId + "", rst.getString("userName"), rst.getString("password"), rst.getString("email"));
+    }
+
+    @Override
+    public boolean update(String password, String userId) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("UPDATE user SET password=? WHERE userId=?"
+                , password, userId);
     }
 }

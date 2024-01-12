@@ -16,6 +16,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.bo.BOFactory;
+import lk.ijse.bo.custom.CustomerBO;
+import lk.ijse.bo.custom.ItemBO;
+import lk.ijse.bo.custom.OrderBO;
+import lk.ijse.bo.custom.PaymentBO;
 import lk.ijse.db.DBConnection;
 import lk.ijse.dto.CustomerDto;
 import lk.ijse.dto.ItemDto;
@@ -108,6 +113,10 @@ public class OrderManageFormController {
 
     @FXML
     private Label lblQuantity;
+    OrderBO orderBO= (OrderBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.ORDER);
+    ItemBO itemBO= (ItemBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.ITEM);
+    CustomerBO customerBO= (CustomerBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.CUSTOMER);
+    PaymentBO paymentBO= (PaymentBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.PAYMENT);
 
     public void initialize(){
         setCellValueFactory();
@@ -136,9 +145,9 @@ public class OrderManageFormController {
 
     private void generateNextOrderId() {
         try {
-            String orderId = OrdersModel.generateNextOrderId();
+            String orderId = orderBO.generateNextOrderId();
             txtId.setText(orderId);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
@@ -146,13 +155,13 @@ public class OrderManageFormController {
     private void loadItemNames() {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<ItemDto> itemDtos = ItemModel.getAllItems();
+            List<ItemDto> itemDtos = itemBO.getAllItems();
 
             for (ItemDto dto : itemDtos) {
                 obList.add(dto.getItemName());
             }
             cmbItem.setItems(obList);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -175,10 +184,10 @@ public class OrderManageFormController {
                     lblQuantity.setDisable(false);
                 }
 
-                ItemDto dto = ItemModel.getItem(name);
+                ItemDto dto = itemBO.getItem(name);
                 txtItemCode.setText(dto.getItemId());
                 txtUnitPrice.setText(dto.getUnitPrice());
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         } else {
@@ -190,14 +199,14 @@ public class OrderManageFormController {
         ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<CustomerDto> idList = CustomerModel.getAllCustomer();
+            List<CustomerDto> idList = customerBO.getAllCustomer();
 
             for (CustomerDto dto : idList) {
                 obList.add(dto.getName());
             }
 
             cmbCustomerName.setItems(obList);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -208,10 +217,10 @@ public class OrderManageFormController {
 
         if (name!= null &&!name.isEmpty()) {
             try {
-                CustomerDto customerDto = CustomerModel.getCustomerByName(name);
+                CustomerDto customerDto = customerBO.getCustomerByName(name);
                 txtCustomerID.setText(customerDto.getCId());
 
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         } else {
@@ -329,11 +338,11 @@ public class OrderManageFormController {
     }
 
     @FXML
-    void btnPlaceOrderOnAction(ActionEvent event) throws SQLException {
+    void btnPlaceOrderOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         String orderId = txtId.getText();
         LocalDate date = LocalDate.parse(lblOrderDate.getText());
         String customerId = txtCustomerID.getText();
-        String paymentId = PaymentModel.generateNextPaymentId();
+        String paymentId = paymentBO.generateNextPaymentId();
         double amount = Double.parseDouble((lblTotal.getText()));
         String status = "paid";
 
@@ -352,7 +361,7 @@ public class OrderManageFormController {
             if (isSuccess) {
                 Alert alert=new Alert(Alert.AlertType.CONFIRMATION, "Order Success!");
                 alert.showAndWait();
-                boolean isSaved = PaymentModel.setPayment(paymentDto);
+                boolean isSaved = paymentBO.setPayment(paymentDto);
                 if (!isSaved) {
                     BoxBlur blur = new BoxBlur(3, 3, 1);
                     root.setEffect(blur);
@@ -440,10 +449,10 @@ public class OrderManageFormController {
         txtScannedData.textProperty().addListener((observable, oldValue, newValue) -> {
 
             try {
-                ItemDto dto = ItemModel.getItemById(txtScannedData.getText());
+                ItemDto dto = itemBO.getItemById(txtScannedData.getText());
 
                 cmbItem.setValue(dto.getItemName());
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         });

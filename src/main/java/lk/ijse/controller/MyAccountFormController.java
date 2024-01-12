@@ -8,6 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+import lk.ijse.bo.BOFactory;
+import lk.ijse.bo.custom.UserBO;
 import lk.ijse.dto.UserDto;
 import lk.ijse.model.UserModel;
 
@@ -51,6 +53,8 @@ public class MyAccountFormController {
     @FXML
     private JFXPasswordField txtReEnterPassword;
 
+    UserBO userBO= (UserBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.USER);
+
     public void initialize (){
         setDisableTrue();
         lblInvaliedPassword.setVisible(false);
@@ -68,17 +72,17 @@ public class MyAccountFormController {
     }
 
     @FXML
-    void btnSaveOnAction(ActionEvent event) throws SQLException {
+    void btnSaveOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         String userId = "U001";
         String currentPassword = txtCurrentPassword.getText();
         String newPassword = txtNewPassword.getText();
         String reEnterPassword = txtReEnterPassword.getText();
 
-        UserDto userDto = UserModel.getUserDtoList(userId);
+        UserDto userDto = userBO.getUserDtoList(userId);
 
         if(userDto.getPassword().equals(currentPassword)){
             if(newPassword.equals(reEnterPassword)){
-                boolean isUpdated = UserModel.updateUser(newPassword, userId);
+                boolean isUpdated = userBO.updateUser(newPassword, userId);
                 if(isUpdated){
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Password updated");
                     alert.showAndWait();

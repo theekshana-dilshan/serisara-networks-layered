@@ -14,6 +14,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import lk.ijse.bo.BOFactory;
+import lk.ijse.bo.custom.UserBO;
 import lk.ijse.dto.UserDto;
 import lk.ijse.model.UserModel;
 
@@ -39,6 +41,8 @@ public class LoginFormController {
 
     String userId = null;
 
+    UserBO userBO= (UserBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.USER);
+
     public void initialize(){
         lblUsernameIncorrect.setVisible(false);
         lblPasswordIncorrect.setVisible(false);
@@ -61,7 +65,7 @@ public class LoginFormController {
         String password = txtPassword.getText();
 
         try {
-            UserDto userDto = UserModel.getUserByName(userName);
+            UserDto userDto = userBO.getUserByName(userName);
             if (userDto != null) {
                 if (userDto.getPassword().equals(password)) {
 
@@ -88,7 +92,7 @@ public class LoginFormController {
                 txtUserName.setUnFocusColor(unFocusColor);
                 return false;
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

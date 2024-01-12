@@ -19,6 +19,8 @@ package lk.ijse.controller;
         import javafx.scene.layout.AnchorPane;
         import javafx.stage.Stage;
         import javafx.util.Duration;
+        import lk.ijse.bo.BOFactory;
+        import lk.ijse.bo.custom.EmployeeBO;
         import lk.ijse.dto.CustomerDto;
         import lk.ijse.dto.EmployeeDto;
         import lk.ijse.dto.tm.EmployeeTm;
@@ -80,6 +82,8 @@ public class EmployeeManageFormController {
     @FXML
     private JFXTextField txtSearch;
 
+    EmployeeBO employeeBO= (EmployeeBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.EMPLOYEE);
+
     public void initialize (){
         setCellValueFactory();
         generateNextEmployeeId();
@@ -100,7 +104,7 @@ public class EmployeeManageFormController {
         ObservableList<EmployeeTm> obList = FXCollections.observableArrayList();
 
         try {
-            List<EmployeeDto> dtoList = EmployeeModel.getAllEmployees();
+            List<EmployeeDto> dtoList = employeeBO.getAllEmployees();
 
             for (EmployeeDto dto : dtoList) {
                 obList.add(
@@ -115,7 +119,7 @@ public class EmployeeManageFormController {
                 );
             }
             tblEmployee.setItems(obList);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -159,7 +163,7 @@ public class EmployeeManageFormController {
         EmployeeDto employeeDto = new EmployeeDto(id, name, address,position, contact, salary, userId);
 
         try {
-            boolean isAdded = EmployeeModel.saveEmployee(employeeDto);
+            boolean isAdded = employeeBO.saveEmployee(employeeDto);
             if (isAdded) {
                 Notifications.create()
                         .graphic(new ImageView(new Image("/icons/icons8-check-mark-48.png")))
@@ -178,7 +182,7 @@ public class EmployeeManageFormController {
                 alert.showAndWait();
                 root.setEffect(null);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
@@ -240,7 +244,7 @@ public class EmployeeManageFormController {
         String id = txtEmployeeId.getText();
 
         try {
-            boolean isDeleted = EmployeeModel.deleteEmployee(id);
+            boolean isDeleted = employeeBO.deleteEmployee(id);
             if (isDeleted) {
                 BoxBlur blur = new BoxBlur(3, 3, 1);
                 root.setEffect(blur);
@@ -256,7 +260,7 @@ public class EmployeeManageFormController {
                 alert.showAndWait();
                 root.setEffect(null);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -280,7 +284,7 @@ public class EmployeeManageFormController {
         }
 
         try {
-            Boolean isUpdated = EmployeeModel.updateEmployee(employeeDto);
+            Boolean isUpdated = employeeBO.updateEmployee(employeeDto);
             if (isUpdated) {
                 Notifications.create()
                         .graphic(new ImageView(new Image("/icons/icons8-check-mark-48.png")))
@@ -299,7 +303,7 @@ public class EmployeeManageFormController {
                 alert.showAndWait();
                 root.setEffect(null);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -310,7 +314,7 @@ public class EmployeeManageFormController {
 
         if (id!= null &&!id.isEmpty()) {
             try {
-                EmployeeDto employeeDto = EmployeeModel.getEmployee(id);
+                EmployeeDto employeeDto = employeeBO.getEmployee(id);
 
                 if(employeeDto != null){
                     txtEmployeeId.setText(employeeDto.getEmpId());
@@ -329,6 +333,8 @@ public class EmployeeManageFormController {
 
             } catch (SQLException e) {
                 throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         } else {
             System.out.println("Customer name is null or empty");
@@ -337,9 +343,9 @@ public class EmployeeManageFormController {
 
     private void generateNextEmployeeId() {
         try {
-            String employeeId = EmployeeModel.generateNextEmployeeId();
+            String employeeId = employeeBO.generateNextEmployeeId();
             txtEmployeeId.setText(employeeId);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }

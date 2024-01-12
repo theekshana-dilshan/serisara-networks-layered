@@ -17,6 +17,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
+import lk.ijse.bo.BOFactory;
+import lk.ijse.bo.custom.ItemBO;
+import lk.ijse.bo.custom.SupplierBO;
 import lk.ijse.dto.CustomerDto;
 import lk.ijse.dto.SupplierDto;
 import lk.ijse.dto.tm.CustomerTm;
@@ -67,6 +70,8 @@ public class SupplierManageFormController {
     @FXML
     private JFXTextField txtSearch;
 
+    SupplierBO supplierBO= (SupplierBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.SUPPLIER);
+
     public void initialize() {
         setCellValueFactory();
         generateNextSupplierId();
@@ -85,7 +90,7 @@ public class SupplierManageFormController {
 
         ObservableList<SupplierTm> obList = FXCollections.observableArrayList();
         try {
-            List<SupplierDto> dtoList = SupplierModel.getAllSuppliers();
+            List<SupplierDto> dtoList = supplierBO.getAllSuppliers();
 
             for(SupplierDto dto : dtoList){
                 obList.add(
@@ -98,7 +103,7 @@ public class SupplierManageFormController {
                 );
             }
             tblSupplier.setItems(obList);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -192,7 +197,7 @@ public class SupplierManageFormController {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = SupplierModel.deleteSupplier(id);
+            boolean isDeleted = supplierBO.deleteSupplier(id);
             if (isDeleted) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Success");
                 alert.showAndWait();
@@ -205,7 +210,7 @@ public class SupplierManageFormController {
                 alert.showAndWait();
                 root.setEffect(null);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -229,7 +234,7 @@ public class SupplierManageFormController {
 
 
         try {
-            boolean isUpdated = SupplierModel.updateSupplier(dto);
+            boolean isUpdated = supplierBO.updateSupplier(dto);
             if (isUpdated) {
                 Notifications.create()
                         .graphic(new ImageView(new Image("/icons/icons8-check-mark-48.png")))
@@ -248,7 +253,7 @@ public class SupplierManageFormController {
                 alert.showAndWait();
                 root.setEffect(null);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -259,7 +264,7 @@ public class SupplierManageFormController {
 
         if (id!= null &&!id.isEmpty()) {
             try {
-                SupplierDto supplierDto = SupplierModel.getSupplier(id);
+                SupplierDto supplierDto = supplierBO.getSupplier(id);
 
                 if(supplierDto != null){
                     txtId.setText(supplierDto.getSupId());
@@ -271,7 +276,7 @@ public class SupplierManageFormController {
                     alert.showAndWait();
                 }
 
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         } else {
@@ -281,9 +286,9 @@ public class SupplierManageFormController {
 
     private void generateNextSupplierId() {
         try {
-            String supplierId = SupplierModel.generateNextSupplierId();
+            String supplierId = supplierBO.generateNextSupplierId();
             txtId.setText(supplierId);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
