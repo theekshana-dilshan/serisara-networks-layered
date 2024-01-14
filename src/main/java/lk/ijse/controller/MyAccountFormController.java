@@ -11,7 +11,6 @@ import javafx.stage.Stage;
 import lk.ijse.bo.BOFactory;
 import lk.ijse.bo.custom.UserBO;
 import lk.ijse.dto.UserDto;
-import lk.ijse.model.UserModel;
 
 import java.sql.SQLException;
 
@@ -73,7 +72,7 @@ public class MyAccountFormController {
 
     @FXML
     void btnSaveOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
-        String userId = "U001";
+        String userId = "U00-001";
         String currentPassword = txtCurrentPassword.getText();
         String newPassword = txtNewPassword.getText();
         String reEnterPassword = txtReEnterPassword.getText();

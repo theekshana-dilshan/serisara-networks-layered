@@ -20,8 +20,6 @@ import lk.ijse.bo.custom.CustomerBO;
 import lk.ijse.dto.CustomerDto;
 import lk.ijse.dto.tm.CustomerTm;
 import lk.ijse.dto.tm.StockTm;
-import lk.ijse.model.CustomerModel;
-import lk.ijse.model.OrdersModel;
 import org.controlsfx.control.Notifications;
 
 import java.io.Serializable;
@@ -115,7 +113,7 @@ public class CustomerManageFormController  implements Serializable {
         String address = txtAddress.getText();
         String contact = txtContactNumber.getText();
         String email = txtEmail.getText();
-        String uId = "U001";
+        String uId = "U00-001";
 
         if(id.isEmpty() || name.isEmpty() || address.isEmpty() || contact.isEmpty() || email.isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR, "Fill all fields");
@@ -157,7 +155,7 @@ public class CustomerManageFormController  implements Serializable {
 
     private boolean validateCustomer(){
 
-        boolean matches = Pattern.matches("[C][0-9]{3,}", txtCustomerId.getText());
+        boolean matches = Pattern.matches("[C][0-9\\-]{3,}", txtCustomerId.getText());
         if (!matches){
             Alert alert = new Alert(Alert.AlertType.ERROR,"Invalid customer id");
             alert.showAndWait();
@@ -230,7 +228,7 @@ public class CustomerManageFormController  implements Serializable {
         String address = txtAddress.getText();
         String contact = txtContactNumber.getText();
         String email = txtEmail.getText();
-        String uId = "U001";
+        String uId = "U00-001";
 
         if(id.isEmpty() || name.isEmpty() || address.isEmpty() || contact.isEmpty() || email.isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR, "Fill all fields");

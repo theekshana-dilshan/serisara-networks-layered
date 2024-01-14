@@ -3,6 +3,7 @@ package lk.ijse.bo.custom;
 import lk.ijse.bo.SuperBO;
 import lk.ijse.db.DBConnection;
 import lk.ijse.dto.SupplierDto;
+import lk.ijse.entity.Supplier;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -17,10 +17,7 @@ import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.bo.BOFactory;
-import lk.ijse.bo.custom.CustomerBO;
-import lk.ijse.bo.custom.ItemBO;
-import lk.ijse.bo.custom.OrderBO;
-import lk.ijse.bo.custom.PaymentBO;
+import lk.ijse.bo.custom.*;
 import lk.ijse.db.DBConnection;
 import lk.ijse.dto.CustomerDto;
 import lk.ijse.dto.ItemDto;
@@ -28,7 +25,6 @@ import lk.ijse.dto.OrderDto;
 import lk.ijse.dto.PaymentDto;
 import lk.ijse.dto.tm.CustomerTm;
 import lk.ijse.dto.tm.OrderTm;
-import lk.ijse.model.*;
 import lombok.SneakyThrows;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -117,6 +113,7 @@ public class OrderManageFormController {
     ItemBO itemBO= (ItemBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.ITEM);
     CustomerBO customerBO= (CustomerBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.CUSTOMER);
     PaymentBO paymentBO= (PaymentBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.PAYMENT);
+    PlaceOrderBO placeOrderBO= (PlaceOrderBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.PLACE_ORDER);
 
     public void initialize(){
         setCellValueFactory();
@@ -357,7 +354,7 @@ public class OrderManageFormController {
         PaymentDto paymentDto = new PaymentDto(paymentId, amount, status, date, orderId);
 
         try {
-            boolean isSuccess = PlaceOrderModel.placeOrder(placeOrderDto);
+            boolean isSuccess = placeOrderBO.placeOrder(placeOrderDto);
             if (isSuccess) {
                 Alert alert=new Alert(Alert.AlertType.CONFIRMATION, "Order Success!");
                 alert.showAndWait();

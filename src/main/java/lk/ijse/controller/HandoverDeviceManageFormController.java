@@ -24,9 +24,6 @@ import lk.ijse.dto.CustomerDto;
 import lk.ijse.dto.DeviceDto;
 import lk.ijse.dto.tm.DeviceTm;
 import lk.ijse.dto.tm.StockTm;
-import lk.ijse.model.CustomerModel;
-import lk.ijse.model.HandoverDeviceModel;
-import lk.ijse.model.OrdersModel;
 import org.controlsfx.control.Notifications;
 
 import java.sql.SQLException;
@@ -236,7 +233,7 @@ public class HandoverDeviceManageFormController {
 
     private boolean validateDevice(){
 
-        boolean matches = Pattern.matches("[D][0-9]{3,}", txtId.getText());
+        boolean matches = Pattern.matches("[D][0-9\\-]{3,}", txtId.getText());
         if (!matches){
             Alert alert = new Alert(Alert.AlertType.ERROR,"Invalid device id");
             alert.showAndWait();

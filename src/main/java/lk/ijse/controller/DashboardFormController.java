@@ -19,10 +19,6 @@ import lk.ijse.dto.CustomerDto;
 import lk.ijse.dto.DeviceDto;
 import lk.ijse.dto.EmployeeDto;
 import lk.ijse.dto.OrderDto;
-import lk.ijse.model.CustomerModel;
-import lk.ijse.model.EmployeeModel;
-import lk.ijse.model.HandoverDeviceModel;
-import lk.ijse.model.OrdersModel;
 
 import java.io.IOException;
 import java.sql.SQLException;

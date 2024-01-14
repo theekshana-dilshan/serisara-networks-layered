@@ -43,7 +43,7 @@ public class SupplierDAOImpl implements SupplierDAO {
     public String generateNewId() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT supId FROM supplier ORDER BY supId DESC LIMIT 1;");
         if (rst.next()) {
-            String id = rst.getString("cId");
+            String id = rst.getString("supId");
             int newSupplierId = Integer.parseInt(id.replace("S00-", "")) + 1;
             return String.format("S00-%03d", newSupplierId);
         } else {
@@ -76,5 +76,10 @@ public class SupplierDAOImpl implements SupplierDAO {
         ResultSet rst = SQLUtil.execute("SELECT * FROM supplier WHERE sName=?",name);
         rst.next();
         return new Supplier(rst.getString("supId"), rst.getString("sName"), rst.getString("address"), rst.getString("contact"));
+    }
+
+    @Override
+    public boolean saveSupplierItem(String itemId, String supId) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("INSERT INTO itemSupplierDetail (itemId, supId) VALUES (?,?)",itemId, supId);
     }
 }

@@ -13,8 +13,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static lk.ijse.model.ItemModel.updateQty;
-
 public class ItemDAOImpl implements ItemDAO {
     @Override
     public ArrayList<Item> getAll() throws SQLException, ClassNotFoundException {

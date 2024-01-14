@@ -15,8 +15,6 @@ import lk.ijse.bo.BOFactory;
 import lk.ijse.bo.custom.CustomerBO;
 import lk.ijse.bo.custom.UserBO;
 import lk.ijse.dto.UserDto;
-import lk.ijse.model.OrdersModel;
-import lk.ijse.model.UserModel;
 
 import javax.management.Notification;
 import javax.swing.text.html.ImageView;

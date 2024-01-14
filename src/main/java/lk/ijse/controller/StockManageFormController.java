@@ -23,7 +23,6 @@ import lk.ijse.bo.BOFactory;
 import lk.ijse.bo.custom.ItemBO;
 import lk.ijse.dto.ItemDto;
 import lk.ijse.dto.tm.StockTm;
-import lk.ijse.model.ItemModel;
 import org.controlsfx.control.Notifications;
 
 import java.io.IOException;
@@ -90,8 +89,6 @@ public class StockManageFormController {
     }
 
     public void loadAllItems() {
-        var model = new ItemModel();
-
         ObservableList<StockTm> obList = FXCollections.observableArrayList();
         try {
             List<ItemDto> dtoList = itemBO.getAllItems();
@@ -160,7 +157,7 @@ public class StockManageFormController {
 
     private boolean validateItem(){
 
-        boolean matches = Pattern.matches("[I][0-9]{3,}", txtId.getText());
+        boolean matches = Pattern.matches("[I][0-9\\-]{3,}", txtId.getText());
         if (!matches){
             Alert alert = new Alert(Alert.AlertType.ERROR,"Invalid item id");
             alert.showAndWait();
@@ -244,7 +241,7 @@ public class StockManageFormController {
             root.setEffect(null);
             return;
         }
-        ItemDto dto = new ItemDto(id, name, cost, qty, unitPrice);
+        ItemDto dto = new ItemDto(id, name, qty, cost, unitPrice);
 
         try {
             boolean isUpdated = itemBO.updateItemDto(dto);

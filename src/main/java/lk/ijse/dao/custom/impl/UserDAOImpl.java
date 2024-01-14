@@ -59,14 +59,14 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User getUserByName(String userName) throws SQLException, ClassNotFoundException {
-        ResultSet rst = SQLUtil.execute("SELECT * FROM Customer WHERE cId=?",userName);
+        ResultSet rst = SQLUtil.execute("SELECT * FROM user WHERE userName=?",userName);
         rst.next();
         return new User(rst.getString("userId"), userName + "", rst.getString("password"), rst.getString("email"));
     }
 
     @Override
     public User getUserDtoList(String userId) throws SQLException, ClassNotFoundException {
-        ResultSet rst = SQLUtil.execute("SELECT * FROM Customer WHERE cId=?",userId);
+        ResultSet rst = SQLUtil.execute("SELECT * FROM user WHERE userId=?",userId);
         rst.next();
         return new User(userId + "", rst.getString("userName"), rst.getString("password"), rst.getString("email"));
     }

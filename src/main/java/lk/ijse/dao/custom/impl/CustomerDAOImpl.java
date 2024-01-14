@@ -15,19 +15,19 @@ public class CustomerDAOImpl implements CustomerDAO {
         ResultSet rst = SQLUtil.execute("SELECT * FROM Customer");
         ArrayList<Customer> getAllCustomer=new ArrayList<>();
         while (rst.next()){
-            Customer entity=new Customer(rst.getString("id"), rst.getString("name"), rst.getString("email"), rst.getString("address"), rst.getString("contact"), rst.getString("userId"));
+            Customer entity=new Customer(rst.getString("cId"), rst.getString("name"), rst.getString("email"), rst.getString("address"), rst.getString("contact"), rst.getString("userId"));
             getAllCustomer.add(entity);
         }
         return getAllCustomer;
     }
     @Override
     public boolean save(Customer entity) throws SQLException, ClassNotFoundException {
-        return SQLUtil.execute("INSERT INTO Customer (id,name, email, address, contact, userId) VALUES (?,?,?,?,?,?)",
+        return SQLUtil.execute("INSERT INTO Customer (cId,name, email, address, contact, userId) VALUES (?,?,?,?,?,?)",
                 entity.getCId(), entity.getName(), entity.getEmail(), entity.getAddress(), entity.getContact(), entity.getUserId());
     }
     @Override
     public boolean update(Customer entity) throws SQLException, ClassNotFoundException {
-        return SQLUtil.execute("UPDATE Customer SET name=?, email=?, address=?, contact=? WHERE id=?"
+        return SQLUtil.execute("UPDATE Customer SET name=?, email=?, address=?, contact=? WHERE cId=?"
                 ,entity.getName(), entity.getEmail(), entity.getAddress(), entity.getContact(),entity.getCId());
     }
 

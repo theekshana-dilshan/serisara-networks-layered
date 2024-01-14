@@ -16,11 +16,11 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import lk.ijse.bo.BOFactory;
 import lk.ijse.bo.custom.ItemBO;
+import lk.ijse.bo.custom.ReStockBO;
 import lk.ijse.bo.custom.SupplierBO;
 import lk.ijse.dto.CustomerDto;
 import lk.ijse.dto.ItemDto;
 import lk.ijse.dto.SupplierDto;
-import lk.ijse.model.*;
 import org.controlsfx.control.Notifications;
 
 import java.lang.reflect.MalformedParametersException;
@@ -52,6 +52,7 @@ public class ReStockFormController {
     private JFXTextField txtqty;
     ItemBO itemBO= (ItemBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.ITEM);
     SupplierBO supplierBO= (SupplierBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.SUPPLIER);
+    ReStockBO reStockBO= (ReStockBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.RE_STOCK);
 
     public void initialize(){
         loadItemNames();
@@ -109,7 +110,7 @@ public class ReStockFormController {
         ItemDto itemDto = new ItemDto(itemId,itemName,qty,cost,unitPrice);
 
         try {
-            boolean isSuccess = ReStockModel.itemSupplier(supplierDto,itemDto);
+            boolean isSuccess = reStockBO.itemSupplier(supplierDto,itemDto);
             if (isSuccess) {
                 Notifications.create()
                         .graphic(new ImageView(new Image("/icons/icons8-check-mark-48.png")))

@@ -9,4 +9,5 @@ import java.sql.SQLException;
 public interface SupplierDAO extends CrudDAO<Supplier> {
     Supplier getSupplier(String supId) throws SQLException, ClassNotFoundException;
     Supplier getSupplierByName(String name) throws SQLException, ClassNotFoundException;
+    boolean saveSupplierItem(String itemId, String supId) throws SQLException, ClassNotFoundException;
 }

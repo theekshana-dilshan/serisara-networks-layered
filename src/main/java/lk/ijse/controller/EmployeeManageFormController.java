@@ -25,9 +25,6 @@ package lk.ijse.controller;
         import lk.ijse.dto.EmployeeDto;
         import lk.ijse.dto.tm.EmployeeTm;
         import lk.ijse.dto.tm.StockTm;
-        import lk.ijse.model.CustomerModel;
-        import lk.ijse.model.EmployeeModel;
-        import lk.ijse.model.OrdersModel;
         import org.controlsfx.control.Notifications;
 
         import java.io.IOException;
@@ -149,7 +146,7 @@ public class EmployeeManageFormController {
         String contact = txtContact.getText();
         String position = txtPosition.getText();
         String salary = txtSalary.getText();
-        String userId = "U001";
+        String userId = "U00-001";
 
         if(id.isEmpty() || name.isEmpty() || address.isEmpty() || contact.isEmpty() || position.isEmpty() || salary.isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR,"Fill all fields");
@@ -190,7 +187,7 @@ public class EmployeeManageFormController {
 
     private boolean validateEmployee(){
 
-        boolean matches = Pattern.matches("[E][0-9]{3,}", txtEmployeeId.getText());
+        boolean matches = Pattern.matches("[E][0-9\\-]{3,}", txtEmployeeId.getText());
         if (!matches){
             Alert alert = new Alert(Alert.AlertType.ERROR,"Invalid employee id");
             alert.showAndWait();
@@ -273,7 +270,7 @@ public class EmployeeManageFormController {
         String contact = txtContact.getText();
         String position = txtPosition.getText();
         String salary = txtSalary.getText();
-        String userId = "U001";
+        String userId = "U00-001";
 
         EmployeeDto employeeDto = new EmployeeDto(id, name, address, contact, position, salary, userId);
 

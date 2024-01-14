@@ -41,8 +41,8 @@ public class ReportFormController {
         btnOrderOk.setDisable(true);
         setCmbType();
     }
-    public void btnShowReportOnAction(javafx.event.ActionEvent actionEvent) throws JRException {
-        InputStream resourceAsStream = getClass().getResourceAsStream("/report/Stock_Report.jrxml");
+    public void getReports(javafx.event.ActionEvent actionEvent, String location) throws JRException {
+        InputStream resourceAsStream = getClass().getResourceAsStream(location);
         JasperDesign jasperDesign = JRXmlLoader.load(resourceAsStream);
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
         JasperPrint jasperPrint = JasperFillManager.fillReport(
@@ -52,19 +52,16 @@ public class ReportFormController {
         );
         JasperViewer.viewReport(jasperPrint, false);
     }
+    public void btnShowReportOnAction(javafx.event.ActionEvent actionEvent) throws JRException {
+        String location = "/report/Stock_Report.jrxml";
+        getReports(actionEvent, location);
+    }
     public void btnOrderReportOkOnAction(javafx.event.ActionEvent actionEvent) throws JRException {
         String comboBox = cmbType.getValue();
 
         if (comboBox.equals("All")) {
-            InputStream resourceAsStream = getClass().getResourceAsStream("/report/All_Orders.jrxml");
-            JasperDesign jasperDesign = JRXmlLoader.load(resourceAsStream);
-            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(
-                    jasperReport,
-                    null,
-                    DBConnection.getInstance().getConnection()
-            );
-            JasperViewer.viewReport(jasperPrint, false);
+            String location = "/report/All_Orders.jrxml";
+            getReports(actionEvent, location);
         } else {
             LocalDate dateFrom = dtpFrom.getValue();
             LocalDate dateTo = dtpTo.getValue();
@@ -90,15 +87,8 @@ public class ReportFormController {
     }
 
     public void btnEmployeeGenerateReportOnAction(ActionEvent actionEvent) throws JRException {
-        InputStream resourceAsStream = getClass().getResourceAsStream("/report/Employee_report.jrxml");
-        JasperDesign jasperDesign = JRXmlLoader.load(resourceAsStream);
-        JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
-        JasperPrint jasperPrint = JasperFillManager.fillReport(
-                jasperReport,
-                null,
-                DBConnection.getInstance().getConnection()
-        );
-        JasperViewer.viewReport(jasperPrint, false);
+        String location = "/report/Employee_report.jrxml";
+        getReports(actionEvent, location);
     }
 
     public void setCmbType(){

@@ -17,7 +17,6 @@ import javafx.stage.Window;
 import lk.ijse.bo.BOFactory;
 import lk.ijse.bo.custom.UserBO;
 import lk.ijse.dto.UserDto;
-import lk.ijse.model.UserModel;
 
 import java.io.IOException;
 import java.sql.SQLException;

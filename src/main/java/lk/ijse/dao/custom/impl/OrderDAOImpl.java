@@ -17,7 +17,7 @@ public class OrderDAOImpl implements OrderDAO {
         ResultSet rst = SQLUtil.execute("SELECT * FROM orders");
         ArrayList<Order> getAllOrders=new ArrayList<>();
         while (rst.next()){
-            Order entity=new Order(rst.getString("id"), rst.getDate("date").toLocalDate(), rst.getString("email"));
+            Order entity=new Order(rst.getString("orderId"), rst.getDate("date").toLocalDate(), rst.getString("cId"));
             getAllOrders.add(entity);
         }
         return getAllOrders;
@@ -63,10 +63,10 @@ public class OrderDAOImpl implements OrderDAO {
 
     @Override
     public List<Order> getAllOdersByDate(String date) throws SQLException, ClassNotFoundException {
-        ResultSet rst = SQLUtil.execute("SELECT * FROM orders WHERE date = ?");
+        ResultSet rst = SQLUtil.execute("SELECT * FROM orders WHERE date = ?", date);
         ArrayList<Order> getAllOrders=new ArrayList<>();
         while (rst.next()){
-            Order entity=new Order(rst.getString("id"), rst.getDate("date").toLocalDate(), rst.getString("email"));
+            Order entity=new Order(rst.getString("orderId"), rst.getDate("date").toLocalDate(), rst.getString("cId"));
             getAllOrders.add(entity);
         }
         return getAllOrders;

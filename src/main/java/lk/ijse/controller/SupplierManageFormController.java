@@ -25,9 +25,6 @@ import lk.ijse.dto.SupplierDto;
 import lk.ijse.dto.tm.CustomerTm;
 import lk.ijse.dto.tm.StockTm;
 import lk.ijse.dto.tm.SupplierTm;
-import lk.ijse.model.CustomerModel;
-import lk.ijse.model.OrdersModel;
-import lk.ijse.model.SupplierModel;
 import org.controlsfx.control.Notifications;
 
 import java.awt.*;
@@ -86,8 +83,6 @@ public class SupplierManageFormController {
         colContact.setCellValueFactory(new PropertyValueFactory<>("contact"));
     }
     private void loadAllSupplier() {
-        var model = new SupplierModel();
-
         ObservableList<SupplierTm> obList = FXCollections.observableArrayList();
         try {
             List<SupplierDto> dtoList = supplierBO.getAllSuppliers();
@@ -131,7 +126,7 @@ public class SupplierManageFormController {
         SupplierDto dto = new SupplierDto(id, name, address, contact);
 
         try {
-            boolean isSaved = SupplierModel.setSupplier(dto);
+            boolean isSaved = supplierBO.setSupplier(dto);
             if (isSaved) {
                 Notifications.create()
                         .graphic(new ImageView(new Image("/icons/icons8-check-mark-48.png")))
@@ -150,14 +145,14 @@ public class SupplierManageFormController {
                 alert.showAndWait();
                 root.setEffect(null);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
     private boolean validateSupplier(){
 
-        boolean matches = Pattern.matches("[S][0-9]{3,}", txtId.getText());
+        boolean matches = Pattern.matches("[S][0-9\\-]{3,}", txtId.getText());
         if (!matches){
             Alert alert = new Alert(Alert.AlertType.ERROR,"Invalid supplier id");
             alert.showAndWait();
